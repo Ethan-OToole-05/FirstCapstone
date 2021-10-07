@@ -7,12 +7,12 @@ namespace Capstone.Class
     public class Product
     {
         public string Name { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public string Type { get; set; }
         public bool IsOutOfStock { get; set; }
         public int ProductAmount { get; set; }
 
-        public Product(string name, double price, string type)
+        public Product(string name, decimal price, string type)
         {
             Name = name;
             Price = price;

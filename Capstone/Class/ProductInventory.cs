@@ -23,7 +23,7 @@ namespace Capstone.Class
                     while(!dataInput.EndOfStream)
                     {
                         string[] productArray = dataInput.ReadLine().Split("|");
-                        Product tempProduct = new Product(productArray[1], double.Parse(productArray[2]), productArray[3]);
+                        Product tempProduct = new Product(productArray[1], decimal.Parse(productArray[2]), productArray[3]);
                         Inventory.Add(productArray[0], tempProduct);
                     }
                 }

@@ -1,0 +1,36 @@
+*Design Phase*
+
+---SPECS---
+You've been asked to develop an application for the newest vending machine distributor, Umbrella Corp. They've released a new vending machine, Vendo-Matic 800, that is integrated with everyone's bank accounts, allowing customers to purchase products from their computers for their convenience.
+
+
+---NOUNS---
+Vending Machine
+UserInterface
+MainMenu
+PurchaseMenu
+Customer
+MoneyProvided
+ProductInventory(Dictionary<SlotID, Product>) private??
+Product private!
+    Name, Price, Type
+    ProductAmount(5)
+    isOutOfStock
+ProductsSold(Dictionary<Product, AmountSold>)
+
+
+---VERBS---
+ReStock
+DisplayProducts
+SelectProduct
+FeedMoney
+FinishTransaction
+LogPurchase (also updates ProductsSold)
+CancelTransaction
+DispenseChange
+DispenseProduct
+    prints item name, cost, money entered
+    prints message "Yum!"
+RemoveStock(?)
+
+Exit

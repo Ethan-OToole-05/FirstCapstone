@@ -1,4 +1,5 @@
 ﻿using System;
+using Capstone.Class;
 
 namespace Capstone
 {
@@ -11,3 +12,5 @@ namespace Capstone
         }
     }
 }
+
+

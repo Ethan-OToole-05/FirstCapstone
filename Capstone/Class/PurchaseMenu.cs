@@ -137,8 +137,20 @@ namespace Capstone.Class
             }
             return output;
         }
-        public decimal DispenseChange()
+        public decimal DispenseChange(decimal moneyFed)
         {
+            int cents = (int)(moneyFed * 100);
+            int counter = 0;
+            int quarters = 0;
+            int dimes = 0;
+            int nickels = 0;
+            int pennies = 0;
+            while(cents - 25 > 0)
+            {
+                counter++;
+            } 
+            
+
             return MoneyFed;
         }
     }

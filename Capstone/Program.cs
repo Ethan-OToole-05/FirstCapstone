@@ -7,8 +7,13 @@ namespace Capstone
     {
         static void Main(string[] args)
         {
-            Menu menu = new Menu();
+            SalesReport report = new SalesReport();
+            
+
+
+            /*Menu menu = new Menu();
             menu.Choices("1");
+            */
         }
     }
 }

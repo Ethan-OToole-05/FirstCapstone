@@ -13,14 +13,14 @@ namespace Capstone
 
 
 
-    public class MainMenu
+    public class Menu
     {
 
         public string Options { get; set; }
 
         public string Choices(string output)
         {
-            output = "Welcome!\n(1) Display Vending Machine Items\n(2) Purchase\n(3) Exit";
+            output = "---Welcome---\n(1) Display Vending Machine Items\n(2) Purchase\n(3) Exit";
             Console.WriteLine(output);
             string input = Console.ReadLine();
             if(input.Contains('1'))

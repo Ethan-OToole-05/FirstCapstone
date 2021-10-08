@@ -25,12 +25,16 @@ namespace Capstone.Class
 
         public bool PrintProductInventory()
         {
+            WriteToScreen("");
+            WriteToScreen("*** PRODUCT SELECTION ***");
+            WriteToScreen("");
             try
             {
                 foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
                 {
                     WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price}");
                 }
+                WriteToScreen("");
                 return true;
             }
             catch(Exception e)
@@ -40,16 +44,44 @@ namespace Capstone.Class
             }
         }
 
+        public bool PrintProductInventory(ProductInventory inventory)
+        {
+            WriteToScreen("");
+            WriteToScreen("*** AVAILABLE PRODUCTS ***");
+            WriteToScreen("");
+            try
+            {
+                foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
+                {
+                    if(!kvp.Value.IsOutOfStock)
+                    {
+                        WriteToScreen($"{kvp.Value.ProductAmount} {kvp.Value.Name}");
+                    }
+                    else
+                    {
+                        WriteToScreen($"{kvp.Value.ProductAmount} {kvp.Value.Name} : OUT OF STOCK");
+                    }
+                }
+                WriteToScreen("");
+                return true;
+            }
+            catch (Exception e)
+            {
+                WriteToScreen("Oops. Something went wrong...");
+                return false;
+            }
+        }
+
         public string GetStringInput(string prompt)
         {
-            Console.WriteLine(prompt);
+            Console.Write(prompt);
             string entry = Console.ReadLine();
             return entry;
         }
 
         public int GetIntInput(string prompt)
         {
-            Console.WriteLine(prompt);
+            Console.Write(prompt);
             string entry = Console.ReadLine();
             try
             {

@@ -8,11 +8,7 @@ namespace Capstone
         static void Main(string[] args)
         {
             ProductInventory inventory = new ProductInventory();
-            ConsoleService ui = new ConsoleService(inventory);
-
-
-            PurchaseMenu purchaseMenu = new PurchaseMenu(inventory);
-
+            MainMenu mainMenu = new MainMenu(inventory);
         }
     }
 }

@@ -6,10 +6,6 @@ namespace Capstone.Class
 {
     class PurchaseMenu : ConsoleService
     {
-        //public ConsoleService UserInterface { get; } = new ConsoleService();
-        //public List<string> MenuOptions { get; } = new List<string>();
-        //public ProductInventory Inventory { get; private set; }
-
         public Product SelectedProduct { get; private set; }
         public decimal MoneyFed { get; private set; } = 0;
         public string[] MenuArray { get; } = { "Feed Money", "Select Product", "Finish Transaction" };
@@ -25,17 +21,11 @@ namespace Capstone.Class
 
             while (!TransactionComplete)
             {
-                //MenuOptions.Add("1. Feed Money");
-                //MenuOptions.Add("2. Select Product");
-                //MenuOptions.Add("3. Finish Transaction");
-                //int userSelection = GetIntInput("Please make a selection: ");
-
                 int userSelection = 0;
                 while (userSelection < 1 || userSelection > 3)
                 {
                     WriteToScreen(WriteMenu(MenuArray[0], MenuArray[1], MenuArray[2]));
                     userSelection = GetIntInput("Please make a selection: ");
-                    //format error (try block)
                 }
                 if (userSelection == 1)
                 {
@@ -55,8 +45,6 @@ namespace Capstone.Class
                 {
                     WriteToScreen($"Change Returned: {MoneyFed}");
                     WriteToScreen(DispenseChange(MoneyFed));
-                    WriteToScreen($"Thank you for shopping with Umbrella Corp!");
-                    //todo send user to main menu
                 }
 
             }
@@ -73,28 +61,13 @@ namespace Capstone.Class
             return MoneyFed;
 
         }
-
-        //should be in base class Menu:
-        //public ProductInventory PrintProductInventory()
-        //{
-        //    ProductInventory inventory = new ProductInventory();
-        //    return inventory;
-        //}
-
         public Product SelectItem(ProductInventory inventory)
         {
-            //try
-            //{
-            ProductInventory Inventory = inventory;
-            foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
-            {
-                WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price}");
-            }
+            PrintProductInventory();
             string userSelection = "";
             while(!Inventory.Inventory.ContainsKey(userSelection) || Inventory.Inventory[userSelection].IsOutOfStock)
             {
-                WriteToScreen("Please make your selection: ");
-                userSelection = Console.ReadLine().ToUpper();
+                userSelection = GetStringInput("Please make your selection: ");
                 if (!Inventory.Inventory.ContainsKey(userSelection) || Inventory.Inventory[userSelection].IsOutOfStock)
                 {
                     WriteToScreen("Sorry, that product is not available.");
@@ -102,12 +75,6 @@ namespace Capstone.Class
             }
             SelectedProduct = Inventory.Inventory[userSelection];
             return SelectedProduct;
-            //}
-            //catch(Exception e)
-            //{
-            //    ui.WriteToScreen("Sorry, please try again...");
-            //    return SelectedProduct;
-            //}
         }
         public decimal Checkout(Product selectedProduct)
         {
@@ -121,14 +88,11 @@ namespace Capstone.Class
         }
         public string DispenseProduct(Product selectedProduct)
         {
-
             string output = "";
             if(!selectedProduct.IsOutOfStock)
             {
                 selectedProduct.ProductAmount--;
             }
-            //todo generate audit log entry
-            //todo update sales report
             if (SelectedProduct.Type.ToLower() == "chip")
             {
                 output = "Crunch Crunch, Yum!";
@@ -163,7 +127,7 @@ namespace Capstone.Class
 
             if(quarters > 0)
             {
-                output += $"{quarters} quarters";
+                output += $"{quarters} quarters ";
             }
             while(cents - 10 >= 0)
             {
@@ -173,7 +137,7 @@ namespace Capstone.Class
 
             if (dimes > 0)
             {
-                output += $"{dimes} dimes";
+                output += $"{dimes} dimes ";
             }
 
             while (cents - 5 >= 0)
@@ -183,13 +147,13 @@ namespace Capstone.Class
             }
             if (nickels > 0)
             {
-                output += $"{nickels} nickels";
+                output += $"{nickels} nickels ";
             }
 
             pennies += cents;
             if (pennies > 0)
             {
-                output += $"{pennies} pennies";
+                output += $" {pennies} pennies";
             }
 
             MoneyFed = 0;

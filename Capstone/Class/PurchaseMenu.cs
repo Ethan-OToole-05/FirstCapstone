@@ -4,60 +4,57 @@ using System.Text;
 
 namespace Capstone.Class
 {
-    class PurchaseMenu : Menu
+    class PurchaseMenu : ConsoleService
     {
-        public ConsoleService UserInterface { get; } = new ConsoleService();
-        public List<string> MenuOptions { get; } = new List<string>();
-        public decimal MoneyFed { get; private set; } = 0;
-        public ProductInventory Inventory { get; private set; }
+        //public ConsoleService UserInterface { get; } = new ConsoleService();
+        //public List<string> MenuOptions { get; } = new List<string>();
+        //public ProductInventory Inventory { get; private set; }
+
         public Product SelectedProduct { get; private set; }
-        
-        public PurchaseMenu(ConsoleService ui)
+        public decimal MoneyFed { get; private set; } = 0;
+        public string[] MenuArray { get; } = { "Feed Money", "Select Product", "Finish Transaction" };
+        public bool TransactionComplete { get; set; } = false;
+
+        public PurchaseMenu(ProductInventory inventory) : base(inventory)
         {
-            UserInterface = ui;
-            ui.WriteToScreen("***Purchase Menu***");
+            WriteToScreen("***Purchase Menu***");
 
-            MenuOptions.Add("1. Feed Money");
-            MenuOptions.Add("2. Select Product");
-            MenuOptions.Add("3. Finish Transaction");
-            
-            foreach(string option in MenuOptions)
+            while (!TransactionComplete)
             {
-                ui.WriteToScreen(option);
-            }
+                //MenuOptions.Add("1. Feed Money");
+                //MenuOptions.Add("2. Select Product");
+                //MenuOptions.Add("3. Finish Transaction");
+                //int userSelection = GetIntInput("Please make a selection: ");
 
-            ui.WriteToScreen("Please make a selection: ");
-            int userSelection = int.Parse(Console.ReadLine());
-            while (userSelection < 1 || userSelection > 4)
-            {
-                foreach (string option in MenuOptions)
+                int userSelection = 0;
+                while (userSelection < 1 || userSelection > 3)
                 {
-                    ui.WriteToScreen(option);
+                    WriteToScreen(WriteMenu(MenuArray[0], MenuArray[1], MenuArray[2]));
+                    userSelection = GetIntInput("Please make a selection: ");
+                    //format error (try block)
+                }
+                if (userSelection == 1)
+                {
+                    WriteToScreen($"Total Funds: {MoneyFed}");
+                    WriteToScreen("Please enter amount to add: ");
+                    decimal money = decimal.Parse(Console.ReadLine());
+                    WriteToScreen($"Total Funds: {FeedMoney(money)}");
+                }
+                if (userSelection == 2)
+                {
+                    SelectedProduct = SelectItem(Inventory);
+                    WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price}");
+                    WriteToScreen($"{DispenseProduct(SelectedProduct)}");
+                    WriteToScreen($"Remaining Funds: {Checkout(SelectedProduct)}");
+                }
+                if (userSelection == 3)
+                {
+                    WriteToScreen($"Change Returned: {Checkout(SelectedProduct)}");
+                    WriteToScreen(DispenseChange(MoneyFed));
+                    WriteToScreen($"Thank you for shopping with Umbrella Corp!");
+                    //todo send user to main menu
                 }
 
-                ui.WriteToScreen("Please make a selection: ");
-                userSelection = int.Parse(Console.ReadLine());
-            }
-            if (userSelection == 1)
-            {
-                ui.WriteToScreen($"Total Funds: {MoneyFed}");
-                ui.WriteToScreen("Please enter amount to add: ");
-                decimal money = decimal.Parse(Console.ReadLine());
-                ui.WriteToScreen($"Total Funds: {FeedMoney(money)}");
-            }
-            if (userSelection == 2 && SelectItem(ui))
-            {
-                ui.WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price}");
-                ui.WriteToScreen($"{DispenseProduct(SelectedProduct)}");
-                ui.WriteToScreen($"Remaining Funds: {Checkout(SelectedProduct)}");
-            }
-            if (userSelection == 3)
-            {
-                ui.WriteToScreen($"Change Returned: {MoneyFed}");
-                MoneyFed = 0;
-                ui.WriteToScreen($"Thank you for shopping with Umbrella Corp!");
-                //todo return change in coins
-                //todo send user to main menu
             }
         }
 
@@ -71,36 +68,39 @@ namespace Capstone.Class
         }
 
         //should be in base class Menu:
-        public ProductInventory PrintProductInventory()
-        {
-            ProductInventory inventory = new ProductInventory();
-            return inventory;
-        }
+        //public ProductInventory PrintProductInventory()
+        //{
+        //    ProductInventory inventory = new ProductInventory();
+        //    return inventory;
+        //}
 
-        public bool SelectItem(ConsoleService ui)
+        public Product SelectItem(ProductInventory inventory)
         {
-            try
+            //try
+            //{
+            ProductInventory Inventory = inventory;
+            foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
             {
-                ProductInventory Inventory = new ProductInventory();
-                foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
-                {
-                    ui.WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price}");
-                }
-                string userSelection = "";
-                while(!Inventory.Inventory.ContainsKey(userSelection) || Inventory.Inventory[userSelection].IsOutOfStock)
-                {
-                    ui.WriteToScreen("Sorry, your current selection is unavailable.");
-                    ui.WriteToScreen("Please make your selection: ");
-                    userSelection = Console.ReadLine();   
-                }
-                SelectedProduct = Inventory.Inventory[userSelection];
-                return true;
+                WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price}");
             }
-            catch(Exception e)
+            string userSelection = "";
+            while(!Inventory.Inventory.ContainsKey(userSelection) || Inventory.Inventory[userSelection].IsOutOfStock)
             {
-                ui.WriteToScreen("Sorry, please try again...");
-                return false;
+                WriteToScreen("Please make your selection: ");
+                userSelection = Console.ReadLine().ToUpper();
+                if (!Inventory.Inventory.ContainsKey(userSelection) || Inventory.Inventory[userSelection].IsOutOfStock)
+                {
+                    WriteToScreen("Sorry, that product is not available.");
+                }
             }
+            SelectedProduct = Inventory.Inventory[userSelection];
+            return SelectedProduct;
+            //}
+            //catch(Exception e)
+            //{
+            //    ui.WriteToScreen("Sorry, please try again...");
+            //    return SelectedProduct;
+            //}
         }
         public decimal Checkout(Product selectedProduct)
         {
@@ -137,9 +137,55 @@ namespace Capstone.Class
             }
             return output;
         }
-        public decimal DispenseChange()
+        public string DispenseChange(decimal moneyFed)
         {
-            return MoneyFed;
-        }
+            int cents = (int)(moneyFed * 100);
+            int quarters = 0;
+            int dimes = 0;
+            int nickels = 0;
+            int pennies = 0;
+            string output = "$Dispensed ";
+            while(cents - 25 >= 0)
+            {
+                quarters++;
+                cents -= 25;
+            }
+
+            if(quarters > 0)
+            {
+                output += $"{quarters} quarters";
+            }
+            while(cents - 10 >= 0)
+            {
+                dimes++;
+                cents -= 10;
+            }
+
+            if (dimes > 0)
+            {
+                output += $"{dimes} dimes";
+            }
+
+            while (cents - 5 >= 0)
+            {
+                nickels++;
+                cents -= 5;
+            }
+            if (nickels > 0)
+            {
+                output += $"{nickels} nickels";
+            }
+
+            pennies += cents;
+            if (pennies > 0)
+            {
+                output += $"{pennies} pennies";
+            }
+
+            MoneyFed = 0;
+            TransactionComplete = true;
+            
+            return output;
+        }   
     }
 }

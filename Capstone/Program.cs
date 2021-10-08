@@ -3,12 +3,16 @@ using Capstone.Class;
 
 namespace Capstone
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            MainMenu menu = new MainMenu();
-            menu.Choices("1");
+            ProductInventory inventory = new ProductInventory();
+            ConsoleService ui = new ConsoleService(inventory);
+
+
+            PurchaseMenu purchaseMenu = new PurchaseMenu(inventory);
+
         }
     }
 }

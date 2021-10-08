@@ -6,6 +6,40 @@ namespace Capstone.Class
 {
     public class ConsoleService
     {
+        public List<string> MenuOptions { get; } = new List<string>();
+        public ProductInventory Inventory { get; private set; }
+        
+        public ConsoleService(ProductInventory inventory)
+        {
+            Inventory = inventory;
+        }
+
+        public string WriteMenu(string optionOne, string optionTwo, string optionThree)
+        {
+            MenuOptions.Add($"1. {optionOne}");
+            MenuOptions.Add($"2. {optionTwo}");
+            MenuOptions.Add($"3. {optionThree}");
+
+            return $"\n1. {optionOne}\n2. {optionTwo}\n3. {optionThree}";
+        }
+
+        public bool PrintProductInventory()
+        {
+            try
+            {
+                foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
+                {
+                    WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price}");
+                }
+                return true;
+            }
+            catch(Exception e)
+            {
+                WriteToScreen("Oops. Something went wrong...");
+                return false;
+            }
+        }
+
         public string GetStringInput(string prompt)
         {
             Console.WriteLine(prompt);
@@ -37,6 +71,5 @@ namespace Capstone.Class
         {
             Console.Clear();
         }
-
     }
 }

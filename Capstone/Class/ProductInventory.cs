@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Capstone.Class
 {
-    class ProductInventory
+    public class ProductInventory
     {
         public Dictionary<string, Product> Inventory { get; set; } = new Dictionary<string, Product>();
 

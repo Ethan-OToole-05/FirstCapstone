@@ -12,11 +12,14 @@ namespace Capstone.Class
         public bool IsOutOfStock { get; set; }
         public int ProductAmount { get; set; }
 
-        public Product(string name, decimal price, string type)
+        public string SlotLocation { get; set; }
+
+        public Product(string name, decimal price, string type, string slotLocation)
         {
             Name = name;
             Price = price;
             Type = type;
+            SlotLocation = slotLocation;
             ProductAmount = 5;
             IsOutOfStock = false;
         }

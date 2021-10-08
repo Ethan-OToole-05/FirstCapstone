@@ -15,6 +15,10 @@ namespace Capstone.Class
         public string[] MenuArray { get; } = { "Feed Money", "Select Product", "Finish Transaction" };
         public bool TransactionComplete { get; set; } = false;
 
+        public SalesReport salesReport = new SalesReport();
+
+        public decimal oldMoney = 0;
+
         public PurchaseMenu(ProductInventory inventory) : base(inventory)
         {
             WriteToScreen("***Purchase Menu***");
@@ -64,7 +68,10 @@ namespace Capstone.Class
             {
                 MoneyFed += money;
             }
+            salesReport.FeedMoneyReport(money, MoneyFed);
+            
             return MoneyFed;
+
         }
 
         //should be in base class Menu:
@@ -104,14 +111,17 @@ namespace Capstone.Class
         }
         public decimal Checkout(Product selectedProduct)
         {
+            oldMoney = MoneyFed;
             if(MoneyFed >= selectedProduct.Price)
             {
                 MoneyFed -= selectedProduct.Price;
             }
+            salesReport.BoughtProductReport(oldMoney, MoneyFed, selectedProduct);
             return MoneyFed;
         }
         public string DispenseProduct(Product selectedProduct)
         {
+
             string output = "";
             if(!selectedProduct.IsOutOfStock)
             {

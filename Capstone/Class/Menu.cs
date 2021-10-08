@@ -7,12 +7,6 @@ using Capstone.Class;
 namespace Capstone
 {
 
-    //I need to make a 'shell' of a menu to inherit it into the other menus
-    //I need to read the input.
-    //I need to 
-
-
-
     public class Menu
     {
 
@@ -37,7 +31,7 @@ namespace Capstone
                         while (!dataInput.EndOfStream)
                         {
                             string[] productArray = dataInput.ReadLine().Split("|");
-                            Product tempProduct = new Product(productArray[1], decimal.Parse(productArray[2]), productArray[3]);
+                            Product tempProduct = new Product(productArray[1], decimal.Parse(productArray[2]), productArray[3], productArray[0]);
                             Console.WriteLine($"{productArray[1]}|{productArray[2]}");
                         }
                     }

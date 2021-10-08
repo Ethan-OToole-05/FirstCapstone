@@ -49,7 +49,7 @@ namespace Capstone.Class
                 }
                 if (userSelection == 3)
                 {
-                    WriteToScreen($"Change Returned: {Checkout(SelectedProduct)}");
+                    WriteToScreen($"Change Returned: {MoneyFed}");
                     WriteToScreen(DispenseChange(MoneyFed));
                     WriteToScreen($"Thank you for shopping with Umbrella Corp!");
                     //todo send user to main menu
@@ -144,7 +144,7 @@ namespace Capstone.Class
             int dimes = 0;
             int nickels = 0;
             int pennies = 0;
-            string output = "$Dispensed ";
+            string output = "Dispensed ";
             while(cents - 25 >= 0)
             {
                 quarters++;

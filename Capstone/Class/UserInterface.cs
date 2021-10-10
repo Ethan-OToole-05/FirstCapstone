@@ -44,7 +44,7 @@ namespace Capstone.Class
                     }
                     else
                     {
-                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price}");
+                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price:C2}");
                     }
                 }
                 WriteToScreen("");

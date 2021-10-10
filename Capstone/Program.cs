@@ -9,6 +9,7 @@ namespace Capstone
         {
             ProductInventory inventory = new ProductInventory();
             MainMenu mainMenu = new MainMenu(inventory);
+            mainMenu.startMenu(inventory);
         }
     }
 }

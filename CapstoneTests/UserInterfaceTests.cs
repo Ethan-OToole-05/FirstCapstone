@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CapstoneTests
 {
     [TestClass]
-    class UserInterfaceTests
+    public class UserInterfaceTests
     {
     }
 }

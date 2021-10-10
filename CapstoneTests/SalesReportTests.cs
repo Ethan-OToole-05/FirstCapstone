@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CapstoneTests
 {
     [TestClass]
-    class SalesReportTests
+    public class SalesReportTests
     {
     }
 }

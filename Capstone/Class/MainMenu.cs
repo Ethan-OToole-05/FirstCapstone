@@ -9,9 +9,11 @@ namespace Capstone.Class
     {
         public new string[] MenuOptions { get; } = { "Display Vending Machine Items", "Purchase", "Exit" };
         public bool IsExit { get; set; } = false;
-        public MainMenu(ProductInventory inventory) : base(inventory)
+        public MainMenu(ProductInventory inventory) : base(inventory) { }
+        public void startMenu(ProductInventory inventory)
+            //can I call function without passing inventory?
         {
-            while(!IsExit)
+            while (!IsExit)
             {
                 WriteToScreen("*** MAIN MENU ***");
                 int userSelection = 0;

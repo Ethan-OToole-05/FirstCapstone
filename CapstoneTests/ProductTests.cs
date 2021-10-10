@@ -7,7 +7,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CapstoneTests
 {
     [TestClass]
-    class ProductTests
+    public class ProductTests
     {
+        [TestMethod]
+        public void ProductHappyPathTest()
+        {
+            
+        }
     }
 }

@@ -7,7 +7,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CapstoneTests
 {
     [TestClass]
-    class ProductInventoryTests
+    public class ProductInventoryTests
     {
+        ProductInventory testInventory = new ProductInventory();
+
+        public void InventoryHappyPathTest()
+        {
+
+        }
     }
 }

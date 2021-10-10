@@ -36,6 +36,7 @@ namespace Capstone.Class
             catch (Exception e)
             {
                 Console.WriteLine("Something went wrong");
+                return false;
             }
             return true;
         }

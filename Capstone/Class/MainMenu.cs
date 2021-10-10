@@ -20,7 +20,7 @@ namespace Capstone.Class
                 int userSelection = 0;
                 while (userSelection < 1 || userSelection > 3)
                 {
-                    WriteToScreen(WriteMenu(MenuArray[0], MenuArray[1], MenuArray[2]));
+                    WriteToScreen(WriteMenu(MenuArray));
                     userSelection = GetIntInput("Please make a selection: ");
                 }
                 if (userSelection == 1)

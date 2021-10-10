@@ -7,20 +7,42 @@ namespace Capstone.Class
     public class UserInterface
     {
         public List<string> MenuOptions { get; } = new List<string>();
-        public ProductInventory Inventory { get; private set; }
+        public ProductInventory Inventory { get; set; }
         
         public UserInterface(ProductInventory inventory)
         {
             Inventory = inventory;
         }
 
-        public string WriteMenu(string optionOne, string optionTwo, string optionThree)
+        public string WriteMenu(string[] menuOptions)
         {
-            MenuOptions.Add($"1. {optionOne}");
-            MenuOptions.Add($"2. {optionTwo}");
-            MenuOptions.Add($"3. {optionThree}");
+            string output = "";
+            try
+            {
+                for (int i = 0; i < menuOptions.Length; i++)
+                {
+                    output += $"\n{i + 1}. {menuOptions[i]}";
+                }
+            }
+            catch(NullReferenceException)
+            {
+                WriteToScreen("Menu cannot be retrieved, please restart the app.");
+            }
+            return output;
+            //if(optionOne == null)
+            //{
+            //    optionOne = "error";
+            //}
+            //if (optionTwo == null)
+            //{
+            //    optionTwo = "error";
+            //}
+            //if (optionThree == null)
+            //{
+            //    optionThree = "error";
+            //}
 
-            return $"\n1. {optionOne}\n2. {optionTwo}\n3. {optionThree}";
+            //return $"\n1. {optionOne}\n2. {optionTwo}\n3. {optionThree}";
         }
 
         public bool PrintProductInventory()

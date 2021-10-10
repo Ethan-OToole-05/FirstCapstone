@@ -2,16 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Capstone.Class;
 
 namespace CapstoneTests
 {
     [TestClass]
-    public class FeedMoneyTests
+    class MainMenuTests
     {
-        [TestMethod]
-        public void FeedMoneyHappyPathTest()
-        {
-
-        }
+        private MainMenu mainMenu = new MainMenu();
     }
 }

@@ -21,7 +21,7 @@ namespace Capstone.Class
                 while (userSelection < 1 || userSelection > 3)
                 {
                     WriteToScreen(WriteMenu(MenuOptions));
-                    WriteToScreen($"Total Funds: {MoneyFed}");
+                    WriteToScreen($"Total Funds: {MoneyFed:C2}");
                     userSelection = GetIntInput("Please make a selection: ");
                 }
                 if (userSelection == 1)
@@ -34,9 +34,9 @@ namespace Capstone.Class
                 {
                     if(SelectItem(Inventory))
                     {
-                        WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price}");
+                        WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price:C2}");
                         WriteToScreen($"{DispenseProduct(SelectedProduct)}");
-                        WriteToScreen($"Remaining Funds: {Checkout(SelectedProduct)}");
+                        WriteToScreen($"Remaining Funds: {Checkout(SelectedProduct):C2}");
                     }
                 }
                 if (userSelection == 3)

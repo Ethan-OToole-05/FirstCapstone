@@ -28,7 +28,8 @@ namespace Capstone.Class
                 File.Create(textFile);
                 using (StreamWriter write = File.CreateText(textFile))
                 {
-                    write.WriteLine("TEST");
+                    write.WriteLine("NEW AUDIT LOG");
+                    write.WriteLine("-------------");
                 }
             }
                 try
@@ -43,6 +44,7 @@ namespace Capstone.Class
                 catch (Exception e)
                 {
                     Console.WriteLine("Something went wrong");
+                    return false;
                 }
                 return true;          
         }
@@ -51,6 +53,15 @@ namespace Capstone.Class
             string directory = Directory.GetCurrentDirectory();
             string textFile = "Log.txt";
             string pathToReport = Path.Combine(directory, textFile);
+            if (!File.Exists(textFile))
+            {
+                File.Create(textFile);
+                using (StreamWriter write = File.CreateText(textFile))
+                {
+                    write.WriteLine("NEW AUDIT LOG");
+                    write.WriteLine("-------------");
+                }
+            }
             try
             {
                 using (StreamWriter sw = new StreamWriter(pathToReport, true))
@@ -61,6 +72,35 @@ namespace Capstone.Class
             catch (Exception e)
             {
                 Console.WriteLine("Something went wrong");
+                return false;
+            }
+            return true;
+        }
+        public bool DispensedChangeReport(decimal moneyFed)
+        {
+            string directory = Directory.GetCurrentDirectory();
+            string textFile = "Log.txt";
+            string pathToReport = Path.Combine(directory, textFile);
+            if (!File.Exists(textFile))
+            {
+                File.Create(textFile);
+                using (StreamWriter write = File.CreateText(textFile))
+                {
+                    write.WriteLine("NEW AUDIT LOG");
+                    write.WriteLine("-------------");
+                }
+            }
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(pathToReport, true))
+                {
+                    sw.WriteLine($"{DateTime.Now} DISPENSED CHANGE {moneyFed:C2}");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Something went wrong");
+                return false;
             }
             return true;
         }

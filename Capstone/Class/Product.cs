@@ -14,13 +14,13 @@ namespace Capstone.Class
         {
             get
             {
-                if (ProductAmount > 0)
+                if (ProductAmount < 1)
                 {
-                    return false;
+                    return true;
                 }
                 else
                 {
-                    return true;
+                    return false;
                 }
             }
         }
@@ -28,11 +28,15 @@ namespace Capstone.Class
 
         public Product(string name, decimal price, string type, string slotLocation)
         {
-            Name = name;
-            Price = price;
-            Type = type;
-            SlotLocation = slotLocation;
+            Name = name != null ? name : "";
+            Type = type != null ? type : "";
+            SlotLocation = slotLocation != null ? slotLocation : "";
             ProductAmount = 5;
+            if(price < 0)
+            {
+                price = 0;
+            }
+            Price = price;
         }
     }
 }

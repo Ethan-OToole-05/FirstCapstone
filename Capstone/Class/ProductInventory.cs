@@ -11,19 +11,14 @@ namespace Capstone.Class
 
         public ProductInventory()
         {
-
-
-            //EDIT THIS BELOW
-            //TELL MATT THE DIRECTORY IS ALWAYS GOING TO DEBUG
-
             string filePath = Environment.CurrentDirectory;
             string fileName = "vendingmachine.csv";
             string fullPath = Path.Combine(filePath, fileName);
 
             while (!File.Exists(fullPath)) 
             {
-                Console.WriteLine("Could not locate inventory file.");
-                Console.WriteLine("Please enter the full path to the file's directory: ");
+                Console.WriteLine("ERROR: Could not locate inventory file.");
+                Console.WriteLine("Please enter the full path to the file: ");
                 filePath = Console.ReadLine();
                 fullPath = Path.Combine(filePath, fileName);
             }

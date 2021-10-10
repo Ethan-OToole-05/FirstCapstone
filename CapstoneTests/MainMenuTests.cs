@@ -7,33 +7,27 @@ using Capstone.Class;
 namespace CapstoneTests
 {
     [TestClass]
-    public class MenuTests
+    public class MainMenuTests
     {
         private static ProductInventory inventory = new ProductInventory();
-        private UserInterface ui = new UserInterface(inventory);
+        private MainMenu mainMenu = new MainMenu(inventory);
         [TestMethod]
         public void writeMenuHappyPathTest()
         {
             string[] menuOptions = { "first", "second", "third" };
-            string expected = $"/n1. first/n2. second/n3. third";
-            string actual = ui.WriteMenu(menuOptions);
-            Assert.AreEqual(expected, actual);
+            Assert.IsTrue(mainMenu.WriteMenu(menuOptions));
         }
         [TestMethod]
         public void writeMenuMoreOptionsTest()
         {
             string[] moreMenuOptions = { "first", "second", "third", "fourth", "fifth" };
-            string expected = $"/n1. first/n2. second/n3. third/n4. fourth/n5. fifth";
-            string actual = ui.WriteMenu(moreMenuOptions);
-            Assert.AreEqual(expected, actual);
+            Assert.IsTrue(mainMenu.WriteMenu(moreMenuOptions));
         }
         [TestMethod]
         public void writeMenuNullTest()
         {
             string[] nullMenuOptions = null;
-            string expected = "";
-            string actual = ui.WriteMenu(nullMenuOptions);
-            Assert.AreEqual(expected, actual);
+            Assert.IsTrue(mainMenu.WriteMenu(nullMenuOptions));
         }
     }
 }

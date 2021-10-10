@@ -7,28 +7,36 @@ namespace Capstone.Class
 {
     public class MainMenu : UserInterface
     {
-        public new string[] MenuOptions { get; } = { "Display Vending Machine Items", "Purchase", "Exit" };
+        public new string[] MenuOptions { get; } = { "Display Inventory", "Make Purchase", "Exit" };
         public bool IsExit { get; set; } = false;
         public MainMenu(ProductInventory inventory) : base(inventory) { }
         public void startMenu(ProductInventory inventory)
-            //can I call function without passing inventory?
         {
             while (!IsExit)
             {
-                WriteToScreen("*** MAIN MENU ***");
                 int userSelection = 0;
                 while (userSelection < 1 || userSelection > 3)
                 {
-                    WriteToScreen(WriteMenu(MenuOptions));
+                    ClearScreen();
+                    WriteToScreen("*** MAIN MENU ***");
+                    WriteToScreen("Total Funds: $0.00");
+                    WriteMenu(MenuOptions);
                     userSelection = GetIntInput("Please make a selection: ");
+                    if (userSelection < 1 || userSelection > MenuOptions.Length)
+                    {
+                        WriteToScreen("Invalid Entry");
+                        userSelection = GetIntInput("Please make a selection: ");
+                    }
                 }
                 if (userSelection == 1)
                 {
                     PrintProductInventory(inventory);
+                    GetStringInput("Press any key to return: ");
                 }
                 if (userSelection == 2)
                 {
                     PurchaseMenu purchaseMenu = new PurchaseMenu(inventory);
+                    purchaseMenu.startMenu(inventory);
                 }
                 if (userSelection == 3)
                 {

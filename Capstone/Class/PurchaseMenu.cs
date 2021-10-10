@@ -4,48 +4,55 @@ using System.Text;
 
 namespace Capstone.Class
 {
-    class PurchaseMenu : UserInterface
+    public class PurchaseMenu : UserInterface
     {
         public Product SelectedProduct { get; private set; }
         public decimal MoneyFed { get; private set; } = 0;
-        public new string[] MenuOptions { get; } = { "Feed Money", "Select Product", "Finish Transaction" };
+        public new string[] MenuOptions { get; } = { "Add Funds", "Select Product", "Checkout" };
         public bool IsTransactionComplete { get; set; } = false;
-        private SalesReport Report { get; } = new SalesReport();
-        public PurchaseMenu(ProductInventory inventory) : base(inventory)
+        public SalesReport Report { get; } = new SalesReport();
+        public PurchaseMenu(ProductInventory inventory) : base(inventory) { }
+        public void startMenu(ProductInventory inventory)
         {
-            WriteToScreen("***Purchase Menu***");
-
             while (!IsTransactionComplete)
             {
                 int userSelection = 0;
                 while (userSelection < 1 || userSelection > 3)
                 {
-                    WriteToScreen(WriteMenu(MenuOptions));
+                    ClearScreen();
+                    WriteToScreen("*** PURCHASE MENU ***");
                     WriteToScreen($"Total Funds: {MoneyFed:C2}");
+                    WriteMenu(MenuOptions);
                     userSelection = GetIntInput("Please make a selection: ");
+                    if (userSelection < 1 || userSelection > MenuOptions.Length)
+                    {
+                        WriteToScreen("Invalid Entry");
+                        userSelection = GetIntInput("Please make a selection: ");
+                    }
                 }
                 if (userSelection == 1)
                 {
-                    WriteToScreen("Please enter amount to add: ");
-                    decimal money = decimal.Parse(Console.ReadLine());
-                    FeedMoney(money);
+                    FeedMoney(GetMoneyInput("Please enter amount to add: "));
+                    GetStringInput("Press any key to return: ");
                 }
                 if (userSelection == 2)
                 {
-                    if(SelectItem(Inventory))
+                    WriteToScreen("");
+                    if (SelectItem(Inventory))
                     {
-                        WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price:C2}");
-                        WriteToScreen($"{DispenseProduct(SelectedProduct)}");
-                        WriteToScreen($"Remaining Funds: {Checkout(SelectedProduct):C2}");
+                        DispenseProduct(SelectedProduct);
+                        WriteToScreen($"Remaining Funds: {MoneyFed}");
+                        GetStringInput("Press any key to return: ");
                     }
                 }
                 if (userSelection == 3)
                 {
-                    WriteToScreen($"Change Returned: {MoneyFed}");
-                    WriteToScreen(DispenseChange(MoneyFed));
+                    WriteToScreen($"Change Returned: {MoneyFed:C2}");
+                    DispenseChange(MoneyFed);
+                    GetStringInput("Press any key to return: ");
                 }
-
             }
+
         }
         public decimal FeedMoney(decimal money)
         {
@@ -57,6 +64,8 @@ namespace Capstone.Class
             if(money > 0)
             {
                 MoneyFed += money;
+                WriteToScreen($"Funds Accepted: {money:C2}");
+                WriteToScreen($"New Total Funds: {MoneyFed:C2}");
             }
             Report.FeedMoneyReport(money, MoneyFed);
             return MoneyFed;
@@ -82,18 +91,15 @@ namespace Capstone.Class
             SelectedProduct = Inventory.Inventory[userSelection];
             return true;
         }
-        public decimal Checkout(Product selectedProduct)
+        public bool DispenseProduct(Product selectedProduct)
         {
             decimal oldMoney = MoneyFed;
-            if(MoneyFed >= selectedProduct.Price)
+            if (MoneyFed >= selectedProduct.Price)
             {
                 MoneyFed -= selectedProduct.Price;
             }
             Report.BoughtProductReport(oldMoney, MoneyFed, selectedProduct);
-            return MoneyFed;
-        }
-        public string DispenseProduct(Product selectedProduct)
-        {
+            WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price:C2}");
             string output = "";
             if(!selectedProduct.IsOutOfStock)
             {
@@ -115,9 +121,10 @@ namespace Capstone.Class
             {
                 output = "Chew Chew, Yum!";
             }
-            return output;
+            WriteToScreen(output);
+            return true;
         }
-        public string DispenseChange(decimal moneyFed)
+        public bool DispenseChange(decimal moneyFed)
         {
             int cents = (int)(moneyFed * 100);
             int quarters = 0;
@@ -161,11 +168,14 @@ namespace Capstone.Class
             {
                 output += $" {pennies} pennies";
             }
-
             MoneyFed = 0;
             IsTransactionComplete = true;
-            
-            return output;
+            if(output.Equals("Dispensed "))
+            {
+                output += "no change";
+            }
+            WriteToScreen(output);
+            return true;
         }   
     }
 }

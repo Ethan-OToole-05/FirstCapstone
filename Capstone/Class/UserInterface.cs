@@ -13,39 +13,35 @@ namespace Capstone.Class
         {
             Inventory = inventory;
         }
-        public string WriteMenu(string[] menuOptions)
+        public bool WriteMenu(string[] menuOptions)
         {
             string output = "";
-            try
+            if(menuOptions != null)
             {
                 for (int i = 0; i < menuOptions.Length; i++)
                 {
                     output += $"\n{i + 1}. {menuOptions[i]}";
                 }
             }
-            catch(NullReferenceException)
-            {
-                WriteToScreen("Menu cannot be retrieved, please restart the app.");
-            }
-            return output;
+            WriteToScreen(output);
+            return true;
         }
         public bool PrintProductInventory()
         {
-            WriteToScreen("");
-            WriteToScreen("*** PRODUCT SELECTION ***");
-            WriteToScreen("");
+            WriteToScreen("PRODUCT SELECTION");
+            WriteToScreen("-----------------");
             try
             {
                 foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
                 {
-                    if(kvp.Value.IsOutOfStock)
+                    string key = kvp.Key;
+                    string name = kvp.Value.Name;
+                    string price = $"{kvp.Value.Price:C2}";
+                    if (kvp.Value.IsOutOfStock)
                     {
-                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : OUT OF STOCK");
+                        price = "OUT OF STOCK";
                     }
-                    else
-                    {
-                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price:C2}");
-                    }
+                    WriteToScreen($"{key} : {name.PadRight(20)}{price}");
                 }
                 WriteToScreen("");
                 return true;
@@ -58,30 +54,27 @@ namespace Capstone.Class
         }
         public bool PrintProductInventory(ProductInventory inventory)
         {
-            WriteToScreen("");
-            WriteToScreen("*** AVAILABLE PRODUCTS ***");
-            WriteToScreen("");
-            try
+            if(inventory == null)
             {
-                foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
-                {
-                    if(kvp.Value.IsOutOfStock)
-                    {
-                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : OUT OF STOCK");
-                    }
-                    else
-                    {
-                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.ProductAmount}");
-                    }
-                }
-                WriteToScreen("");
+                WriteToScreen("ERROR: Unable to retrieve Product Inventory");
                 return true;
             }
-            catch (Exception e)
+            WriteToScreen("PRODUCT INVENTORY");
+            WriteToScreen("-----------------");
+            foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
             {
-                WriteToScreen("Oops. Something went wrong...");
-                return false;
+                string key = kvp.Key;
+                string name = kvp.Value.Name;
+                string amount = kvp.Value.ProductAmount.ToString();
+                string outOfStock = "";
+                if(kvp.Value.IsOutOfStock)
+                {
+                    outOfStock = "OUT OF STOCK";
+                }
+                WriteToScreen($"{amount} {name.PadRight(20)}{outOfStock}");
             }
+            WriteToScreen("");
+            return true;
         }
         public string GetStringInput(string prompt)
         {
@@ -91,7 +84,7 @@ namespace Capstone.Class
         }
         public int GetIntInput(string prompt)
         {
-            WriteToScreen(prompt);
+            Console.Write(prompt);
             string entry = Console.ReadLine();
             try
             {
@@ -100,8 +93,22 @@ namespace Capstone.Class
             }
             catch (Exception e)
             {
-                WriteToScreen("Invalid entry, please enter a number.");
                 return -1;
+            }
+        }
+        public decimal GetMoneyInput(string prompt)
+        {
+            Console.Write(prompt);
+            string entry = Console.ReadLine();
+            try
+            {
+                decimal entryM = decimal.Parse(entry);
+                return entryM;
+            }
+            catch (Exception e)
+            {
+                WriteToScreen("Invalid entry, please enter a cash amount.");
+                return 0;
             }
         }
         public void WriteToScreen(string output)

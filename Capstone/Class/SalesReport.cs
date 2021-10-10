@@ -17,27 +17,35 @@ namespace Capstone.Class
     
 
     public class SalesReport
-    {//Need money and money feeding MoneyFed
+    {//Report on time money was fed and how much was fed.
         public bool FeedMoneyReport(decimal moneyFed, decimal totalMoney)
         {
-            string directory = Directory.GetCurrentDirectory();
+            string directory = Environment.CurrentDirectory;
             string textFile = "Log.txt";
             string pathToReport = Path.Combine(directory, textFile);
-
-            try
+            if (!File.Exists(textFile))
             {
-                using (StreamWriter sw = new StreamWriter(pathToReport, true))
+                File.Create(textFile);
+                using (StreamWriter write = File.CreateText(textFile))
                 {
-                    sw.WriteLine($"{DateTime.Now} FEED MONEY ${moneyFed} ${totalMoney}");
-                    
+                    write.WriteLine("TEST");
                 }
+            }
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(pathToReport, true))
+                    {
+                        sw.WriteLine($"{DateTime.Now} FEED MONEY {moneyFed:C2} {totalMoney:C2}");
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Something went wrong");
-            }
-            return true;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Something went wrong");
+                }
+                return true;
+            
         }
         public bool BoughtProductReport(decimal moneyFed, decimal totalMoney, Product product)
         {
@@ -49,7 +57,7 @@ namespace Capstone.Class
             {
                 using (StreamWriter sw = new StreamWriter(pathToReport, true))
                 {
-                    sw.WriteLine($"{DateTime.Now} ${product.Name} ${product.SlotLocation} ${moneyFed} ${totalMoney}");
+                    sw.WriteLine($"{DateTime.Now} {product.Name} {product.SlotLocation} {moneyFed:C2} {totalMoney:C2}");
 
 
 
@@ -62,6 +70,10 @@ namespace Capstone.Class
             }
             return true;
         }
+
+
+
+
 
         public void WritingReports()
         {

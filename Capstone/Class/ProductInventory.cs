@@ -11,10 +11,13 @@ namespace Capstone.Class
 
         public ProductInventory()
         {
-            //todo tests will be relative path
-            //todo CurrentDirectory
-            string dataFilePath = "C:\\Users\\Student\\workspace\\capstones\\c-capstone-module-1-team-4\\vendingmachine.csv";
-            if (!File.Exists(dataFilePath))
+            
+
+            //EDIT THIS BELOW
+            //TELL MATT THE DIRECTORY IS ALWAYS GOING TO DEBUG
+            string dataFilePath = Path.Combine(Environment.CurrentDirectory, "vendingmachine.csv");
+
+            if (!File.Exists(dataFilePath)) 
             {
                 throw new FileNotFoundException();
             }

@@ -6,14 +6,13 @@ namespace Capstone.Class
 {
     public class UserInterface
     {
-        public List<string> MenuOptions { get; } = new List<string>();
+        public string[] MenuOptions { get; }
         public ProductInventory Inventory { get; set; }
         
         public UserInterface(ProductInventory inventory)
         {
             Inventory = inventory;
         }
-
         public string WriteMenu(string[] menuOptions)
         {
             string output = "";
@@ -29,22 +28,7 @@ namespace Capstone.Class
                 WriteToScreen("Menu cannot be retrieved, please restart the app.");
             }
             return output;
-            //if(optionOne == null)
-            //{
-            //    optionOne = "error";
-            //}
-            //if (optionTwo == null)
-            //{
-            //    optionTwo = "error";
-            //}
-            //if (optionThree == null)
-            //{
-            //    optionThree = "error";
-            //}
-
-            //return $"\n1. {optionOne}\n2. {optionTwo}\n3. {optionThree}";
         }
-
         public bool PrintProductInventory()
         {
             WriteToScreen("");
@@ -72,7 +56,6 @@ namespace Capstone.Class
                 return false;
             }
         }
-
         public bool PrintProductInventory(ProductInventory inventory)
         {
             WriteToScreen("");
@@ -100,14 +83,12 @@ namespace Capstone.Class
                 return false;
             }
         }
-
         public string GetStringInput(string prompt)
         {
             Console.Write(prompt);
             string entry = Console.ReadLine();
             return entry;
         }
-
         public int GetIntInput(string prompt)
         {
             WriteToScreen(prompt);
@@ -123,12 +104,10 @@ namespace Capstone.Class
                 return -1;
             }
         }
-
         public void WriteToScreen(string output)
         {
             Console.WriteLine(output);
         }
-
         public void ClearScreen()
         {
             Console.Clear();

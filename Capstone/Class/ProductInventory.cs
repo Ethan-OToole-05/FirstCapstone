@@ -11,19 +11,25 @@ namespace Capstone.Class
 
         public ProductInventory()
         {
-            
+
 
             //EDIT THIS BELOW
             //TELL MATT THE DIRECTORY IS ALWAYS GOING TO DEBUG
-            string dataFilePath = Path.Combine(Environment.CurrentDirectory, "vendingmachine.csv");
 
-            if (!File.Exists(dataFilePath)) 
+            string filePath = Environment.CurrentDirectory;
+            string fileName = "vendingmachine.csv";
+            string fullPath = Path.Combine(filePath, fileName);
+
+            while (!File.Exists(fullPath)) 
             {
-                throw new FileNotFoundException();
+                Console.WriteLine("Could not locate inventory file.");
+                Console.WriteLine("Please enter the full path to the file's directory: ");
+                filePath = Console.ReadLine();
+                fullPath = Path.Combine(filePath, fileName);
             }
             try
             {
-                using (StreamReader dataInput = new StreamReader(dataFilePath))
+                using (StreamReader dataInput = new StreamReader(fullPath))
                 {
                     while(!dataInput.EndOfStream)
                     {
@@ -35,7 +41,7 @@ namespace Capstone.Class
             }
             catch(Exception e)
             {
-                Console.WriteLine("Something went wrong!");
+                Console.WriteLine("ERROR: File not found. Please restart the app.");
             }
         }
     }

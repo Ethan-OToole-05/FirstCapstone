@@ -9,6 +9,7 @@ namespace CapstoneTests
     [TestClass]
     class MainMenuTests
     {
-        private MainMenu mainMenu = new MainMenu();
+        static ProductInventory inventory = new ProductInventory();
+        private MainMenu mainMenu = new MainMenu(inventory);
     }
 }

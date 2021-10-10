@@ -8,23 +8,19 @@ namespace Capstone.Class
     {
         public Product SelectedProduct { get; private set; }
         public decimal MoneyFed { get; private set; } = 0;
-        public string[] MenuArray { get; } = { "Feed Money", "Select Product", "Finish Transaction" };
-        public bool TransactionComplete { get; set; } = false;
-
-        public SalesReport salesReport = new SalesReport();
-
-        public decimal oldMoney = 0;
-
+        public new string[] MenuOptions { get; } = { "Feed Money", "Select Product", "Finish Transaction" };
+        public bool IsTransactionComplete { get; set; } = false;
+        private SalesReport Report { get; } = new SalesReport();
         public PurchaseMenu(ProductInventory inventory) : base(inventory)
         {
             WriteToScreen("***Purchase Menu***");
 
-            while (!TransactionComplete)
+            while (!IsTransactionComplete)
             {
                 int userSelection = 0;
                 while (userSelection < 1 || userSelection > 3)
                 {
-                    WriteToScreen(WriteMenu(MenuArray));
+                    WriteToScreen(WriteMenu(MenuOptions));
                     WriteToScreen($"Total Funds: {MoneyFed}");
                     userSelection = GetIntInput("Please make a selection: ");
                 }
@@ -51,22 +47,19 @@ namespace Capstone.Class
 
             }
         }
-
         public decimal FeedMoney(decimal money)
         {
-            if(money + MoneyFed > 160)
+            if(money + MoneyFed > 20)
             {
-                WriteToScreen("DECLINED: You cannot add funds above $160.00");
+                WriteToScreen("DECLINED: You cannot add funds above $20");
                 return MoneyFed;
             }
             if(money > 0)
             {
                 MoneyFed += money;
             }
-            salesReport.FeedMoneyReport(money, MoneyFed);
-            
+            Report.FeedMoneyReport(money, MoneyFed);
             return MoneyFed;
-
         }
         public bool SelectItem(ProductInventory inventory)
         {
@@ -91,12 +84,12 @@ namespace Capstone.Class
         }
         public decimal Checkout(Product selectedProduct)
         {
-            oldMoney = MoneyFed;
+            decimal oldMoney = MoneyFed;
             if(MoneyFed >= selectedProduct.Price)
             {
                 MoneyFed -= selectedProduct.Price;
             }
-            salesReport.BoughtProductReport(oldMoney, MoneyFed, selectedProduct);
+            Report.BoughtProductReport(oldMoney, MoneyFed, selectedProduct);
             return MoneyFed;
         }
         public string DispenseProduct(Product selectedProduct)
@@ -170,7 +163,7 @@ namespace Capstone.Class
             }
 
             MoneyFed = 0;
-            TransactionComplete = true;
+            IsTransactionComplete = true;
             
             return output;
         }   

@@ -63,26 +63,26 @@ namespace Capstone.Class
             return true;
         }
 
-        public void WritingReports()
-        {
-            string directory = Directory.GetCurrentDirectory();
-            string textFile = "Log.txt";
-            string pathToReport = Path.Combine(directory, textFile);
+        //public void WritingReports()
+        //{
+        //    string directory = Directory.GetCurrentDirectory();
+        //    string textFile = "Log.txt";
+        //    string pathToReport = Path.Combine(directory, textFile);
 
-            try
-            {
-                using(StreamWriter sw = new StreamWriter(pathToReport))
-                {
-                    sw.WriteLine(DateTime.Now);
+        //    try
+        //    {
+        //        using(StreamWriter sw = new StreamWriter(pathToReport))
+        //        {
+        //            sw.WriteLine(DateTime.Now);
                     
-                }
+        //        }
                 
-            } catch(Exception e)
-            {
-                Console.WriteLine("Something went wrong");
-            }
+        //    } catch(Exception e)
+        //    {
+        //        Console.WriteLine("Something went wrong");
+        //    }
             
-        }
+        //}
 
 
     }

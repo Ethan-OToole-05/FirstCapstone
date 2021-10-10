@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Capstone.Class
 {
-    public class ConsoleService
+    public class UserInterface
     {
         public List<string> MenuOptions { get; } = new List<string>();
         public ProductInventory Inventory { get; private set; }
         
-        public ConsoleService(ProductInventory inventory)
+        public UserInterface(ProductInventory inventory)
         {
             Inventory = inventory;
         }
@@ -32,7 +32,14 @@ namespace Capstone.Class
             {
                 foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
                 {
-                    WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price}");
+                    if(kvp.Value.IsOutOfStock)
+                    {
+                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : OUT OF STOCK");
+                    }
+                    else
+                    {
+                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.Price}");
+                    }
                 }
                 WriteToScreen("");
                 return true;
@@ -53,13 +60,13 @@ namespace Capstone.Class
             {
                 foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
                 {
-                    if(!kvp.Value.IsOutOfStock)
+                    if(kvp.Value.IsOutOfStock)
                     {
-                        WriteToScreen($"{kvp.Value.ProductAmount} {kvp.Value.Name}");
+                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : OUT OF STOCK");
                     }
                     else
                     {
-                        WriteToScreen($"{kvp.Value.ProductAmount} {kvp.Value.Name} : OUT OF STOCK");
+                        WriteToScreen($"{kvp.Key} : {kvp.Value.Name} : {kvp.Value.ProductAmount}");
                     }
                 }
                 WriteToScreen("");
@@ -81,7 +88,7 @@ namespace Capstone.Class
 
         public int GetIntInput(string prompt)
         {
-            Console.Write(prompt);
+            WriteToScreen(prompt);
             string entry = Console.ReadLine();
             try
             {
@@ -90,7 +97,8 @@ namespace Capstone.Class
             }
             catch (Exception e)
             {
-                throw new FormatException($"Cannot parse {entry} into an integer.");
+                WriteToScreen("Invalid entry, please enter a number.");
+                return -1;
             }
         }
 

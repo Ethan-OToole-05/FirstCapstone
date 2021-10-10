@@ -6,7 +6,7 @@ using System.Text;
 namespace Capstone.Class
 {
 
-    public class MainMenu : ConsoleService
+    public class MainMenu : UserInterface
     {
         public ProductInventory ProductInventory { get; private set; } = new ProductInventory();
         public string[] MenuArray { get; } = { "Display Vending Machine Items", "Purchase", "Exit" };

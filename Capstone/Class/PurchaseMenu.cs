@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Capstone.Class
 {
-    class PurchaseMenu : ConsoleService
+    class PurchaseMenu : UserInterface
     {
         public Product SelectedProduct { get; private set; }
         public decimal MoneyFed { get; private set; } = 0;
@@ -25,21 +25,23 @@ namespace Capstone.Class
                 while (userSelection < 1 || userSelection > 3)
                 {
                     WriteToScreen(WriteMenu(MenuArray[0], MenuArray[1], MenuArray[2]));
+                    WriteToScreen($"Total Funds: {MoneyFed}");
                     userSelection = GetIntInput("Please make a selection: ");
                 }
                 if (userSelection == 1)
                 {
-                    WriteToScreen($"Total Funds: {MoneyFed}");
                     WriteToScreen("Please enter amount to add: ");
                     decimal money = decimal.Parse(Console.ReadLine());
-                    WriteToScreen($"Total Funds: {FeedMoney(money)}");
+                    FeedMoney(money);
                 }
                 if (userSelection == 2)
                 {
-                    SelectedProduct = SelectItem(Inventory);
-                    WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price}");
-                    WriteToScreen($"{DispenseProduct(SelectedProduct)}");
-                    WriteToScreen($"Remaining Funds: {Checkout(SelectedProduct)}");
+                    if(SelectItem(Inventory))
+                    {
+                        WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price}");
+                        WriteToScreen($"{DispenseProduct(SelectedProduct)}");
+                        WriteToScreen($"Remaining Funds: {Checkout(SelectedProduct)}");
+                    }
                 }
                 if (userSelection == 3)
                 {
@@ -52,6 +54,11 @@ namespace Capstone.Class
 
         public decimal FeedMoney(decimal money)
         {
+            if(money + MoneyFed > 160)
+            {
+                WriteToScreen("DECLINED: You cannot add funds above $160.00");
+                return MoneyFed;
+            }
             if(money > 0)
             {
                 MoneyFed += money;
@@ -61,20 +68,26 @@ namespace Capstone.Class
             return MoneyFed;
 
         }
-        public Product SelectItem(ProductInventory inventory)
+        public bool SelectItem(ProductInventory inventory)
         {
             PrintProductInventory();
             string userSelection = "";
-            while(!Inventory.Inventory.ContainsKey(userSelection) || Inventory.Inventory[userSelection].IsOutOfStock)
+            while(!Inventory.Inventory.ContainsKey(userSelection) || Inventory.Inventory[userSelection].IsOutOfStock || Inventory.Inventory[userSelection].Price > MoneyFed)
             {
-                userSelection = GetStringInput("Please make your selection: ");
+                userSelection = GetStringInput("Please make your selection: ").ToUpper();
                 if (!Inventory.Inventory.ContainsKey(userSelection) || Inventory.Inventory[userSelection].IsOutOfStock)
                 {
-                    WriteToScreen("Sorry, that product is not available.");
+                    WriteToScreen("Sorry, that selection is not available.");
+                    return false;
+                }
+                else if (Inventory.Inventory[userSelection].Price > MoneyFed)
+                {
+                    WriteToScreen("Not enough funds.");
+                    return false;
                 }
             }
             SelectedProduct = Inventory.Inventory[userSelection];
-            return SelectedProduct;
+            return true;
         }
         public decimal Checkout(Product selectedProduct)
         {

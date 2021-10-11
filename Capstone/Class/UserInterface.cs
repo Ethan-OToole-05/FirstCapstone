@@ -28,6 +28,7 @@ namespace Capstone.Class
         }
         public bool PrintProductInventory()
         {
+            WriteToScreen("-----------------");
             WriteToScreen("PRODUCT SELECTION");
             WriteToScreen("-----------------");
             try
@@ -59,6 +60,7 @@ namespace Capstone.Class
                 WriteToScreen("ERROR: Unable to retrieve Product Inventory");
                 return true;
             }
+            WriteToScreen("-----------------");
             WriteToScreen("PRODUCT INVENTORY");
             WriteToScreen("-----------------");
             foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)

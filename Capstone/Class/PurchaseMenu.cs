@@ -40,8 +40,13 @@ namespace Capstone.Class
                     WriteToScreen("");
                     if (SelectItem(Inventory))
                     {
+                        ClearScreen();
                         DispenseProduct(SelectedProduct);
                         WriteToScreen($"Remaining Funds: {MoneyFed}");
+                        GetStringInput("Press any key to return: ");
+                    }
+                    else
+                    {
                         GetStringInput("Press any key to return: ");
                     }
                 }
@@ -66,8 +71,8 @@ namespace Capstone.Class
                 MoneyFed += money;
                 WriteToScreen($"Funds Accepted: {money:C2}");
                 WriteToScreen($"New Total Funds: {MoneyFed:C2}");
+                Report.FeedMoneyReport(money, MoneyFed);
             }
-            Report.FeedMoneyReport(money, MoneyFed);
             return MoneyFed;
         }
         public bool SelectItem(ProductInventory inventory)
@@ -93,36 +98,45 @@ namespace Capstone.Class
         }
         public bool DispenseProduct(Product selectedProduct)
         {
+            if (selectedProduct == null)
+            {
+                return false;
+            }
             decimal oldMoney = MoneyFed;
             if (MoneyFed >= selectedProduct.Price)
             {
                 MoneyFed -= selectedProduct.Price;
+                Report.BoughtProductReport(oldMoney, MoneyFed, selectedProduct);
+                WriteToScreen($"Item Dispensed: {selectedProduct.Name}, {selectedProduct.Price:C2}");
+                string output = "";
+                if (!selectedProduct.IsOutOfStock)
+                {
+                    selectedProduct.ProductAmount--;
+                }
+                if (selectedProduct.Type.ToLower() == "chip")
+                {
+                    output = "Crunch Crunch, Yum!";
+                }
+                if (selectedProduct.Type.ToLower() == "candy")
+                {
+                    output = "Munch Munch, Yum!";
+                }
+                if (selectedProduct.Type.ToLower() == "drink")
+                {
+                    output = "Glug Glug, Yum!";
+                }
+                if (selectedProduct.Type.ToLower() == "gum")
+                {
+                    output = "Chew Chew, Yum!";
+                }
+                if (selectedProduct.Type.ToLower() == "healthbar")
+                {
+                    output = "Chew Chew, Crunch, You broke a tooth!!";
+                }
+                WriteToScreen(output);
+                return true;
             }
-            Report.BoughtProductReport(oldMoney, MoneyFed, selectedProduct);
-            WriteToScreen($"Item Dispensed: {SelectedProduct.Name}, {SelectedProduct.Price:C2}");
-            string output = "";
-            if(!selectedProduct.IsOutOfStock)
-            {
-                selectedProduct.ProductAmount--;
-            }
-            if (SelectedProduct.Type.ToLower() == "chip")
-            {
-                output = "Crunch Crunch, Yum!";
-            }
-            if (SelectedProduct.Type.ToLower() == "candy")
-            {
-                output = "Munch Munch, Yum!";
-            }
-            if (SelectedProduct.Type.ToLower() == "drink")
-            {
-                output = "Glug Glug, Yum!";
-            }
-            if (SelectedProduct.Type.ToLower() == "gum")
-            {
-                output = "Chew Chew, Yum!";
-            }
-            WriteToScreen(output);
-            return true;
+            return false;
         }
         public bool DispenseChange(decimal moneyFed)
         {

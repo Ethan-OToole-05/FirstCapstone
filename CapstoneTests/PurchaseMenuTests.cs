@@ -32,7 +32,7 @@ namespace CapstoneTests
         [TestMethod]
         public void PrintInventoryHappyPath()
         {
-            Assert.IsTrue(purchaseMenu.PrintProductInventory(inventory));
+            Assert.IsTrue(purchaseMenu.PrintProductInventory());
         }
         [TestMethod]
         public void FeedMoneyHappyPathTest()

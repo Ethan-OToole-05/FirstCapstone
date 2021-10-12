@@ -7,14 +7,18 @@ namespace Capstone.Class
 {
     public class ProductInventory
     {
-        public Dictionary<string, Product> Inventory { get; set; } = new Dictionary<string, Product>();
+        public Dictionary<string, Product> Inventory { get; } = new Dictionary<string, Product>();
 
         public ProductInventory()
         {
             string filePath = Environment.CurrentDirectory;
             string fileName = "vendingmachine.csv";
             string fullPath = Path.Combine(filePath, fileName);
-
+            if (!File.Exists(fullPath))
+            {
+                filePath.Replace(@"\bin\Debug\netcoreapp3.1", "");
+                fullPath = Path.Combine(filePath, fileName);
+            }
             while (!File.Exists(fullPath)) 
             {
                 Console.WriteLine("ERROR: Could not locate inventory file.");
@@ -36,7 +40,8 @@ namespace Capstone.Class
             }
             catch(Exception e)
             {
-                Console.WriteLine("ERROR: File not found. Please restart the app.");
+                Console.WriteLine(e);
+                Console.WriteLine("File not found. Please restart the app.");
             }
         }
     }

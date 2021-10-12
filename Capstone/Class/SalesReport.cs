@@ -43,7 +43,7 @@ namespace Capstone.Class
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Something went wrong");
+                    Console.WriteLine(e);
                     return false;
                 }
                 return true;          
@@ -71,7 +71,7 @@ namespace Capstone.Class
             }
             catch (Exception e)
             {
-                Console.WriteLine("Something went wrong");
+                Console.WriteLine(e);
                 return false;
             }
             return true;
@@ -99,7 +99,7 @@ namespace Capstone.Class
             }
             catch (Exception e)
             {
-                Console.WriteLine("Something went wrong");
+                Console.WriteLine(e);
                 return false;
             }
             return true;

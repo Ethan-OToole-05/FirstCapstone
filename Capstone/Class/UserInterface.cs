@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Capstone.Class
 {
     public class UserInterface
     {
-        public string[] MenuOptions { get; }
-        public ProductInventory Inventory { get; set; }
+        private string[] MenuOptions { get; }
+        public ProductInventory Inventory { get; }
         
         public UserInterface(ProductInventory inventory)
         {
@@ -20,62 +21,11 @@ namespace Capstone.Class
             {
                 for (int i = 0; i < menuOptions.Length; i++)
                 {
-                    output += $"\n{i + 1}. {menuOptions[i]}";
+
+                    output = $"|    {i + 1}. {menuOptions[i]}";
+                    WriteToScreen(output);
                 }
             }
-            WriteToScreen(output);
-            return true;
-        }
-        public bool PrintProductInventory()
-        {
-            WriteToScreen("-----------------");
-            WriteToScreen("PRODUCT SELECTION");
-            WriteToScreen("-----------------");
-            try
-            {
-                foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
-                {
-                    string key = kvp.Key;
-                    string name = kvp.Value.Name;
-                    string price = $"{kvp.Value.Price:C2}";
-                    if (kvp.Value.IsOutOfStock)
-                    {
-                        price = "OUT OF STOCK";
-                    }
-                    WriteToScreen($"{key} : {name.PadRight(20)}{price}");
-                }
-                WriteToScreen("");
-                return true;
-            }
-            catch(Exception e)
-            {
-                WriteToScreen("Oops. Something went wrong...");
-                return false;
-            }
-        }
-        public bool PrintProductInventory(ProductInventory inventory)
-        {
-            if(inventory == null)
-            {
-                WriteToScreen("ERROR: Unable to retrieve Product Inventory");
-                return true;
-            }
-            WriteToScreen("-----------------");
-            WriteToScreen("PRODUCT INVENTORY");
-            WriteToScreen("-----------------");
-            foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
-            {
-                string key = kvp.Key;
-                string name = kvp.Value.Name;
-                string amount = kvp.Value.ProductAmount.ToString();
-                string outOfStock = "";
-                if(kvp.Value.IsOutOfStock)
-                {
-                    outOfStock = "OUT OF STOCK";
-                }
-                WriteToScreen($"{amount} {name.PadRight(20)}{outOfStock}");
-            }
-            WriteToScreen("");
             return true;
         }
         public string GetStringInput(string prompt)
@@ -120,6 +70,62 @@ namespace Capstone.Class
         public void ClearScreen()
         {
             Console.Clear();
+        }
+        public void WriteUmbrellaLogo()
+        {
+            string filePath = Environment.CurrentDirectory;
+            string txtImgFile = "TextImages\\umbrellaLogo.txt";
+            string fullPath = Path.Combine(filePath, txtImgFile);
+            if (!File.Exists(fullPath))
+            {
+                filePath.Replace(@"\bin\Debug\netcoreapp3.1", "");
+                fullPath = Path.Combine(filePath, txtImgFile);
+            }
+            try
+            {
+                using(StreamReader sr = new StreamReader(fullPath))
+                {
+                    while(!sr.EndOfStream)
+                    {
+                        string line = sr.ReadLine();
+                        WriteToScreen(line);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("UMBRELLA CORPORATION");
+                Console.WriteLine("**VENDO-MATIC  800**");
+                Console.WriteLine();
+            }
+            Console.Write("Press any key to continue...");
+            Console.ReadLine();
+        }
+        public void WriteUmbrellaMenu()
+        {
+            string filePath = Environment.CurrentDirectory;
+            string txtImgFile = "TextImages\\halfUmbrella.txt";
+            string fullPath = Path.Combine(filePath, txtImgFile);
+            if (!File.Exists(fullPath))
+            {
+                filePath.Replace(@"\bin\Debug\netcoreapp3.1", "");
+                fullPath = Path.Combine(filePath, txtImgFile);
+            }
+            try
+            {
+                using (StreamReader stream = new StreamReader(fullPath))
+                {
+                    while (!stream.EndOfStream)
+                    {
+                        string line = stream.ReadLine();
+                        WriteToScreen(line);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                WriteToScreen(" * brought to you by UMBRELLA CORP * ");
+            }
         }
     }
 }

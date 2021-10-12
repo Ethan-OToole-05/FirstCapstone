@@ -8,9 +8,9 @@ namespace Capstone.Class
     {
         public Product SelectedProduct { get; private set; }
         public decimal MoneyFed { get; private set; } = 0;
-        public new string[] MenuOptions { get; } = { "Add Funds", "Select Product", "Checkout" };
-        public bool IsTransactionComplete { get; set; } = false;
-        public SalesReport Report { get; } = new SalesReport();
+        private string[] MenuOptions { get; } = { "ADD FUNDS", "SELECT PRODUCT", "CHECKOUT" };
+        private bool IsTransactionComplete { get; set; } = false;
+        private SalesReport Report { get; } = new SalesReport();
         public PurchaseMenu(ProductInventory inventory) : base(inventory) { }
         public void startMenu(ProductInventory inventory)
         {
@@ -20,10 +20,16 @@ namespace Capstone.Class
                 while (userSelection < 1 || userSelection > 3)
                 {
                     ClearScreen();
-                    WriteToScreen("*** PURCHASE MENU ***");
-                    WriteToScreen($"Total Funds: {MoneyFed:C2}");
+                    WriteUmbrellaMenu();
+                    WriteToScreen(@"|     '------------'");
+                    WriteToScreen(@"|    * PURCHASE MENU *");
+                    WriteToScreen(@"|     *------------*");
+                    WriteToScreen(@"|");
+                    WriteToScreen($"|    Total Funds: {MoneyFed:C2}");
+                    WriteToScreen(@"|");
                     WriteMenu(MenuOptions);
-                    userSelection = GetIntInput("Please make a selection: ");
+                    WriteToScreen(@"|");
+                    userSelection = GetIntInput(@"\_// Please make a selection: ");
                     if (userSelection < 1 || userSelection > MenuOptions.Length)
                     {
                         WriteToScreen("Invalid Entry");
@@ -37,10 +43,9 @@ namespace Capstone.Class
                 }
                 if (userSelection == 2)
                 {
-                    WriteToScreen("");
+                    ClearScreen();
                     if (SelectItem(Inventory))
                     {
-                        ClearScreen();
                         DispenseProduct(SelectedProduct);
                         WriteToScreen($"Remaining Funds: {MoneyFed}");
                         GetStringInput("Press any key to return: ");
@@ -59,6 +64,25 @@ namespace Capstone.Class
             }
 
         }
+        public bool PrintProductInventory()
+        {
+            WriteToScreen("-----------------");
+            WriteToScreen("PRODUCT SELECTION");
+            WriteToScreen("-----------------");
+            foreach (KeyValuePair<string, Product> kvp in Inventory.Inventory)
+            {
+                string key = kvp.Key;
+                string name = kvp.Value.Name;
+                string price = $"{kvp.Value.Price:C2}";
+                if (kvp.Value.IsOutOfStock)
+                {
+                    price = "OUT OF STOCK";
+                }
+                WriteToScreen($"{key} : {name.PadRight(20)}{price}");
+            }
+            WriteToScreen("");
+            return true;
+        }
         public decimal FeedMoney(decimal money)
         {
             if(money + MoneyFed > 20)
@@ -75,7 +99,7 @@ namespace Capstone.Class
             }
             return MoneyFed;
         }
-        public bool SelectItem(ProductInventory inventory)
+        private bool SelectItem(ProductInventory inventory)
         {
             PrintProductInventory();
             string userSelection = "";
@@ -138,7 +162,7 @@ namespace Capstone.Class
             }
             return false;
         }
-        public bool DispenseChange(decimal moneyFed)
+        private bool DispenseChange(decimal moneyFed)
         {
             int cents = (int)(moneyFed * 100);
             int quarters = 0;
